@@ -1,5 +1,5 @@
 all: simulator.o datapath.o loader.o const.o error.o
-	g++ -std=c++11 simulator.o datapath.o loader.o const.o error.o -O2 -o single_cycle
+	g++ -std=c++11 simulator.o datapath.o loader.o const.o error.o -O2 -o pipeline
 
 simulator.o:
 	g++ -std=c++11 simulator.cpp -O3 -c
@@ -17,4 +17,4 @@ const.o:
 	g++ -std=c++11 const.hpp const.cpp -O3 -c
 
 clean:
-	rm *.o *.gch *.stack_dump single_cycle
+	rm *.o *.gch *.stack_dump pipeline

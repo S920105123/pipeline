@@ -41,7 +41,10 @@ void parse(Instruction *inst, int word)
 {
 	/* This function parse a binary-formatted big-endian 
 	   instruction and store all the information into *inst. */
+	inst->origin=word;
 	word=btol(word);
+	inst->origin=word;
+	std::cerr<<std::hex<<inst->origin<<std::endl;
 	int mask5=0x1F, mask6=0x3F, mask16=0xFFFF, mask26=0x3FFFFFF;
 	inst->opcode=(word>>26)&mask6;
 	if (inst->opcode==0) {

@@ -10,6 +10,7 @@ struct Instruction {
 	int opcode, funct;
 	int rs,rt,rd;
 	int immediate;
+	int origin;
 };
 
 /* Memories */

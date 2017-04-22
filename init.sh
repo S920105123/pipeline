@@ -1,4 +1,4 @@
-chmod 777 golden/single_cycle
+chmod 777 golden/pipeline
 cd simulator
 sh cr.sh
 cd ../testcase

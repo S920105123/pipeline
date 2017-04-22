@@ -7,7 +7,7 @@ do
 	cp ./open/${dir}/dimage.bin ./simulator/dimage.bin
 	cp ./open/${dir}/iimage.bin ./simulator/iimage.bin
 	cd ./simulator
-	./single_cycle
+	./pipeline
 	cd ..
 	diff ./open/${dir}/snapshot.rpt ./simulator/snapshot.rpt > diff_snapshot.tmp
 	diff ./open/${dir}/error_dump.rpt ./simulator/error_dump.rpt > diff_error.tmp
