@@ -9,8 +9,8 @@ extern int pre_reg[35], &pre_PC, &pre_sp;
 extern std::queue<int> change;
 
 /* Function pointers, R_func[ADD]=add function, etc. */
-extern int (*R_func[64])(int rd, int rs, int rt, int shamt);
-extern int (*func[64])(int rt, int rs, int immediate);
+extern int (*R_func[64])(int rs, int rt, int shamt);
+extern int (*func[64])(int rs, int immediate);
 
 /* Call this to init pointer */
 void init_datapath();
