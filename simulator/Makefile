@@ -1,5 +1,5 @@
-all: simulator.o datapath.o loader.o const.o error.o
-	g++ -std=c++11 simulator.o datapath.o loader.o const.o error.o -O2 -o pipeline
+all: simulator.o datapath.o loader.o const.o error.o ALU.o
+	g++ -std=c++11 simulator.o ALU.o datapath.o loader.o const.o error.o -O2 -o pipeline
 
 simulator.o:
 	g++ -std=c++11 simulator.cpp -O3 -c
@@ -15,6 +15,9 @@ error.o:
 
 const.o:
 	g++ -std=c++11 const.hpp const.cpp -O3 -c
+
+ALU.o:
+	g++ -std=c++11 ALU.hpp ALU.cpp -O3 -c
 
 clean:
 	rm *.o *.gch *.stack_dump pipeline

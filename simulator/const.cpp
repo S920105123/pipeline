@@ -2,7 +2,7 @@
 #include "const.hpp"
 
 bool legal[64], legal_r[64];
-std::string inst_str_r[64], inst_str[64];
+std::string inst_str_r[64], inst_str[64], str_nop;
 
 void init_str_const()
 {
@@ -13,46 +13,48 @@ void init_str_const()
 	}
 	
 	/* R-format */
-	inst_str_r[ADD]="add";
-	inst_str_r[ADDU]="addu";
-	inst_str_r[SUB]="sub";
-	inst_str_r[AND]="and";
-	inst_str_r[OR]="or";
-	inst_str_r[XOR]="xor";
-	inst_str_r[NOR]="nor";
-	inst_str_r[NAND]="nand";
-	inst_str_r[SLT]="slt";
-	inst_str_r[SLL]="sll";
-    inst_str_r[SRL]="srl";
-    inst_str_r[SRA]="sra";
-    inst_str_r[JR]="jr";
-    inst_str_r[MULT]="mult";
-    inst_str_r[MULTU]="multu";
-    inst_str_r[MFHI]="mfhi";
-    inst_str_r[MFLO]="mflo";
+	inst_str_r[ADD]="ADD";
+	inst_str_r[ADDU]="ADDU";
+	inst_str_r[SUB]="SUB";
+	inst_str_r[AND]="AND";
+	inst_str_r[OR]="OR";
+	inst_str_r[XOR]="XOR";
+	inst_str_r[NOR]="NOR";
+	inst_str_r[NAND]="NAND";
+	inst_str_r[SLT]="SLT";
+	inst_str_r[SLL]="SLL";
+    inst_str_r[SRL]="SRL";
+    inst_str_r[SRA]="SRA";
+    inst_str_r[JR]="JR";
+    inst_str_r[MULT]="MULT";
+    inst_str_r[MULTU]="MULTU";
+    inst_str_r[MFHI]="MFHI";
+    inst_str_r[MFLO]="MFLO";
     
     /* Others */
-    inst_str[ADDI]="addi";
-    inst_str[ADDIU]="addiu";
-    inst_str[LW]="lw";
-    inst_str[LH]="lh";
-    inst_str[LHU]="lhu";
-    inst_str[LB]="lb";
-    inst_str[LBU]="lbu";
-    inst_str[SW]="sw";
-    inst_str[SH]="sh";
-    inst_str[SB]="sb";
-    inst_str[LUI]="lui";
-    inst_str[ANDI]="andi";
-    inst_str[ORI]="ori";
-    inst_str[NORI]="nori";
-    inst_str[SLTI]="slti";
-    inst_str[BEQ]="beq";
-    inst_str[BNE]="bne";
-    inst_str[BGTZ]="bgtz";
-    inst_str[J]="j";
-    inst_str[JAL]="jal";
-    inst_str[HALT]="halt";
+    inst_str[ADDI]="ADDI";
+    inst_str[ADDIU]="ADDIU";
+    inst_str[LW]="LW";
+    inst_str[LH]="LH";
+    inst_str[LHU]="LHU";
+    inst_str[LB]="LB";
+    inst_str[LBU]="LBU";
+    inst_str[SW]="SW";
+    inst_str[SH]="SH";
+    inst_str[SB]="SB";
+    inst_str[LUI]="LUI";
+    inst_str[ANDI]="ANDI";
+    inst_str[ORI]="ORI";
+    inst_str[NORI]="NORI";
+    inst_str[SLTI]="SLTI";
+    inst_str[BEQ]="BEQ";
+    inst_str[BNE]="BNE";
+    inst_str[BGTZ]="BGTZ";
+    inst_str[J]="J";
+    inst_str[JAL]="JAL";
+    inst_str[HALT]="HALT";
+    
+    str_nop="NOP";
 }
 
 void init_const()

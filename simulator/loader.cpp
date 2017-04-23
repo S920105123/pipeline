@@ -44,7 +44,6 @@ void parse(Instruction *inst, int word)
 	inst->origin=word;
 	word=btol(word);
 	inst->origin=word;
-	std::cerr<<std::hex<<inst->origin<<std::endl;
 	int mask5=0x1F, mask6=0x3F, mask16=0xFFFF, mask26=0x3FFFFFF;
 	inst->opcode=(word>>26)&mask6;
 	if (inst->opcode==0) {
@@ -70,11 +69,6 @@ void parse(Instruction *inst, int word)
 void print_inst(const Instruction *target)
 {
 	/* This function print an instruction. (for debugging) */
-	static bool first=true;
-	if (first) {
-		first=false;
-		init_str_const();
-	}
 	if (target->opcode==0) {
 		std::cerr<<inst_str_r[target->funct];
 		std::cerr<<std::dec<<" "<<target->rd<<" "<<target->rs<<" "<<target->rt<<" "<<target->immediate;

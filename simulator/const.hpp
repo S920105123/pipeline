@@ -23,7 +23,7 @@ const int ADDI  = 0x08,  ADDIU = 0x09,  LW    = 0x23,
 const int J     = 0x02,  JAL   = 0x03,  HALT  = 0x3F;
 
 /* Store the name of every instruction. Call init_str_const() to init. */
-extern std::string inst_str_r[64], inst_str[64];
+extern std::string inst_str_r[64], inst_str[64], str_nop;
 void init_str_const();
 
 /* Store whether instruction is legal. Call init_const() to init */

@@ -5,12 +5,13 @@
 #include "const.hpp"
 #include "loader.hpp"
 #include "datapath.hpp"
+#include "ALU.hpp"
 #include "error.hpp"
-//#define DEBUG
+#define DEBUG
 
 FILE *fout;
 int num_inst, num_word, cycle;
-char buf[256];
+char buf[512];
 bool stop_simulate;
 
 inline void print_reg(int idx, bool &first) {
@@ -39,6 +40,18 @@ inline void print_reg(int idx, bool &first) {
 	fwrite(buf,1,len,fout);
 }
 
+inline void print_pipeline()
+{
+	/* Pipeline stages */
+	int len=0;
+	len+=sprintf(buf,"IF: 0x%08x\n",inst[PC>>2].origin);
+	len+=sprintf(buf+len,"ID: %s\n",get_str(if_id).c_str());
+	len+=sprintf(buf+len,"EX: %s\n",get_str(id_ex).c_str());
+	len+=sprintf(buf+len,"DM: %s\n",get_str(ex_mem).c_str());
+	len+=sprintf(buf+len,"WB: %s\n",get_str(mem_wb).c_str());
+	fwrite(buf,1,len,fout);
+}
+
 void output()
 {
 	/* This function check whether register value is changed and output it if yes. */
@@ -56,6 +69,8 @@ void output()
 		print_reg(34,first);
 		pre_PC=PC;
 	}
+	
+	print_pipeline();
 	if (!first) {
 		buf[0]=buf[1]='\n';
 		fwrite(buf,1,2,fout);
@@ -72,23 +87,12 @@ void simulate()
 			return;
 		}
 		cycle++;
-		//std::cerr<<"cycle "<<std::dec<<cycle<<": ";
-		//print_inst(&inst[idx]);
-		if (opcode==0) {
-			if (!legal_r[funct]) {
-				std::cerr<<"illegal instruction found at 0x"<<std::setw(8)<<std::setfill('0')<<std::hex<<std::uppercase<<PC<<std::endl;
-				return;
-			}
-			//fout<<inst_str_r[funct]<<"\n";
-			(*R_func[funct])();
-		} else {
-			if (!legal[opcode]) {
-				std::cerr<<"illegal instruction found at 0x"<<std::setw(8)<<std::setfill('0')<<std::hex<<std::uppercase<<PC<<std::endl;
-				return;
-			}
-			//fout<<inst_str[opcode]<<"\n";
-			(*func[opcode])();
-		}
+		
+		write_back();
+		mem_access();
+		execution();
+		inst_decode();
+		inst_fetch();
 		if (!stop_simulate) {
 			output();
 		}
@@ -106,7 +110,9 @@ int main()
 	/* Initialization */	
 	init_error();
 	init_const();
+	init_str_const();
 	init_datapath();
+	init_pipeline();
 	load_img(PC,num_inst,num_word,sp,pre_sp);
 	fout=fopen("snapshot.rpt","wb");
 	
@@ -114,13 +120,12 @@ int main()
 	for (int i=PC>>2;i<(PC>>2)+num_inst;i++) {
 		print_inst(&inst[i]);
 	}
-//	for (int i=0;i<num_word;i++) {
-//		std::cerr<<std::hex<<mem[i]<<std::endl;
-//	}
 	#endif
+	
 	for (int i=0;i<35;i++) {
 		print_reg(i,first);
 	}
+	print_pipeline();
 	buf[0]=buf[1]='\n';
 	fwrite(buf,1,2,fout);
 	
