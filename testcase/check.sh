@@ -6,9 +6,9 @@ cp dimage.bin ../simulator/dimage.bin
 cp iimage.bin ../simulator/iimage.bin
 
 cd ../golden
-./single_cycle
+./pipeline
 cd ../simulator
-./single_cycle
+./pipeline
 cd ../testcase
 
 echo -------------diff-------------
