@@ -214,14 +214,18 @@ void write_back() {
 	wb_temp=mem_wb;
 	if (mem_wb.R_format && write_rd[mem_wb.opcode]) {
 		if (mem_wb.rd==0) {
-			error(WRITE_ZERO);
+			if (!mem_wb.NOP) {
+				error(WRITE_ZERO);
+			}
 		} else {
 			reg[mem_wb.rd]=mem_wb.immediate;
 			change.push(mem_wb.rd);
 		}
 	} else if (!mem_wb.R_format && write_rt[mem_wb.opcode]) {
 		if (mem_wb.rt==0) {
-			error(WRITE_ZERO);
+			if (!mem_wb.NOP) {
+                                error(WRITE_ZERO);
+                        }
 		} else {
 			reg[mem_wb.rt]=mem_wb.immediate;
 			change.push(mem_wb.rt);
