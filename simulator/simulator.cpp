@@ -103,6 +103,7 @@ void simulate()
 		if (!stop_simulate) {
 			output();
 		}
+		output_error();
 		
 		idx=PC>>2;
 		opcode=inst[idx].opcode;

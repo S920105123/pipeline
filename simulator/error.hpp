@@ -12,5 +12,6 @@ extern std::string err_str[5];
 
 void init_error();
 void error(int type);
+void output_error();
 
 #endif
