@@ -4,6 +4,7 @@
 #include "error.hpp"
 #include "loader.hpp"
 #include "const.hpp"
+#include "hazard.hpp"
 
 /* Registers */
 int reg[36], HI=32, LO=33, &PC=reg[34], &sp=reg[29];
@@ -11,7 +12,7 @@ int pre_reg[36], &pre_PC=pre_reg[34], &pre_sp=pre_reg[29];
 State if_id, id_ex, ex_mem, mem_wb;
 std::queue<int> change;
 bool stall;
-extern bool stop_simulate;
+extern bool stop_simulate,fwd_exmem_ex_rs, fwd_exmem_ex_rt, fwd_memwb_ex_rs, fwd_memwb_ex_rt;
 
 State::State() {
 	/* Default constructor, create a stalled state. */
@@ -72,11 +73,26 @@ void inst_decode() {
 }
 
 void execution() {
+	int alu_rs, alu_rt;
+	
+	/* Forwarding, note that pipeline stages have advanced. */
+	if (fwd_exmem_ex_rs) {
+		alu_rs=ex_mem.immediate;
+	} else {
+		alu_rs=reg[id_ex.rs];
+	}
+	if (fwd_exmem_ex_rt) {
+		alu_rs=ex_mem.immediate;
+	} else {
+		alu_rs=reg[id_ex.rt];
+	}
+	
 	ex_mem=id_ex;
+	
 	if (ex_mem.R_format && R_func[ex_mem.opcode]!=NULL) {
-		ex_mem.immediate=R_func[ex_mem.opcode](reg[ex_mem.rs], reg[ex_mem.rt], ex_mem.immediate);
+		ex_mem.immediate=R_func[ex_mem.opcode](alu_rs, alu_rt, ex_mem.immediate);
 	} else if (func[ex_mem.opcode]!=NULL) {
-		ex_mem.immediate=func[ex_mem.opcode](reg[ex_mem.rs], ex_mem.immediate);
+		ex_mem.immediate=func[ex_mem.opcode](alu_rs, ex_mem.immediate);
 	}
 }
 

@@ -28,7 +28,7 @@ void init_str_const();
 
 /* Store whether instruction is legal. Call init_const() to init */
 extern bool legal[64], legal_r[64];
-extern bool write_rd[64], write_rt[64], read_rs_r[64], read_rs[64], read_rt[64];
+extern bool write_rd[64], write_rt[64], read_rs_r[64], read_rs[64], read_rt[64], read_rt_r[64];
 void init_const();
 
 #endif

@@ -236,4 +236,5 @@ void init_datapath() {
 	func[BGTZ]=NULL;
 	func[J]=NULL;
 	func[JAL]=NULL;
+	func[HALT]=NULL;
 }

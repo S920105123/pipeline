@@ -7,6 +7,7 @@
 #include "datapath.hpp"
 #include "ALU.hpp"
 #include "error.hpp"
+#include "hazard.hpp"
 #define DEBUG
 
 FILE *fout;
@@ -46,7 +47,12 @@ inline void print_pipeline()
 	int len=0;
 	len+=sprintf(buf,"IF: 0x%08X\n",inst[PC>>2].origin);
 	len+=sprintf(buf+len,"ID: %s\n",get_str(if_id).c_str());
-	len+=sprintf(buf+len,"EX: %s\n",get_str(id_ex).c_str());
+	len+=sprintf(buf+len,"EX: %s",get_str(id_ex).c_str());
+	if (fwd_exmem_ex_rs) len+=sprintf(buf+len," fwd_EX-DM_rs_$%d",id_ex.rs);
+	if (fwd_memwb_ex_rs) len+=sprintf(buf+len," fwd_DM-WB_rs_$%d",id_ex.rs);
+	if (fwd_exmem_ex_rt) len+=sprintf(buf+len," fwd_EX-DM_rt_$%d",id_ex.rt);
+	if (fwd_memwb_ex_rt) len+=sprintf(buf+len," fwd_DM-WB_rt_$%d",id_ex.rt);
+	buf[len++]='\n';
 	len+=sprintf(buf+len,"DM: %s\n",get_str(ex_mem).c_str());
 	len+=sprintf(buf+len,"WB: %s\n",get_str(mem_wb).c_str());
 	fwrite(buf,1,len,fout);
@@ -82,7 +88,7 @@ void simulate()
 	/* This function control the flow of simulate. */
 	int idx=(PC>>2), opcode=inst[idx].opcode, funct=inst[idx].funct;
 	
-	while (opcode!=HALT && !stop_simulate) {
+	while (!stop_simulate) {
 		if (PC>=1024 || PC<0) {
 			return;
 		}
@@ -93,6 +99,7 @@ void simulate()
 		execution();
 		inst_decode();
 		inst_fetch();
+		detect_hazard();
 		if (!stop_simulate) {
 			output();
 		}
@@ -100,6 +107,13 @@ void simulate()
 		idx=PC>>2;
 		opcode=inst[idx].opcode;
 		funct=inst[idx].funct;
+		if ( opcode==HALT                              &&
+		     (!if_id.R_format && if_id.opcode==HALT)   && 
+		     (!id_ex.R_format && id_ex.opcode==HALT)   &&
+			 (!ex_mem.R_format && ex_mem.opcode==HALT) &&
+			 (!mem_wb.R_format && mem_wb.opcode==HALT) ) {
+			stop_simulate=true;
+		}
 	}
 }
 
