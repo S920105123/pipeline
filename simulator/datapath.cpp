@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include "datapath.hpp"
 #include "ALU.hpp"
 #include "error.hpp"
@@ -9,7 +10,7 @@
 /* Registers */
 int reg[36], HI=32, LO=33, &PC=reg[34], &sp=reg[29];
 int pre_reg[36], &pre_PC=pre_reg[34], &pre_sp=pre_reg[29];
-State if_id, id_ex, ex_mem, mem_wb;
+State if_id, id_ex, ex_mem, mem_wb, wb_temp;
 std::queue<int> change;
 bool stall;
 extern bool stop_simulate,fwd_exmem_ex_rs, fwd_exmem_ex_rt, fwd_memwb_ex_rs, fwd_memwb_ex_rt;
@@ -63,12 +64,27 @@ void init_pipeline() {
 	mem_wb=State();
 }
 
+void print_stage()
+{
+	fprintf(stderr,"IF-ID: %s rd=%d rs=%d rt=%d immediate=%d\n",get_str(if_id).c_str(),if_id.rd,if_id.rs,if_id.rt,if_id.immediate);
+	fprintf(stderr,"ID-EX: %s rd=%d rs=%d rt=%d immediate=%d\n",get_str(id_ex).c_str(),id_ex.rd,id_ex.rs,id_ex.rt,id_ex.immediate);
+	fprintf(stderr,"EX_DM: %s rd=%d rs=%d rt=%d immediate=%d\n",get_str(ex_mem).c_str(),ex_mem.rd,ex_mem.rs,ex_mem.rt,ex_mem.immediate);
+	fprintf(stderr,"DM-WB: %s rd=%d rs=%d rt=%d immediate=%d\n",get_str(mem_wb).c_str(),mem_wb.rd,mem_wb.rs,mem_wb.rt,mem_wb.immediate);
+	fprintf(stderr,"WB-TP: %s rd=%d rs=%d rt=%d immediate=%d\n",get_str(wb_temp).c_str(),wb_temp.rd,wb_temp.rs,wb_temp.rt,wb_temp.immediate);
+	if (fwd_exmem_ex_rs) fprintf(stderr,"fwd_EX-DM_rs\n");
+	if (fwd_memwb_ex_rs) fprintf(stderr,"fwd_DM-WB_rs\n");
+	if (fwd_exmem_ex_rt) fprintf(stderr,"fwd_EX-DM_rt\n");
+	if (fwd_memwb_ex_rt) fprintf(stderr,"fwd_DM-WB_rt\n");
+	fprintf(stderr,"\n\n");
+}
+
 void inst_fetch() {
 	if_id=State(inst[PC>>2]);	
 	PC=PC+4;
 }
 
-void inst_decode() {
+void inst_decode()
+{
 	id_ex=if_id;
 }
 
@@ -82,9 +98,9 @@ void execution() {
 		alu_rs=reg[id_ex.rs];
 	}
 	if (fwd_exmem_ex_rt) {
-		alu_rs=ex_mem.immediate;
+		alu_rt=ex_mem.immediate;
 	} else {
-		alu_rs=reg[id_ex.rt];
+		alu_rt=reg[id_ex.rt];
 	}
 	
 	ex_mem=id_ex;
@@ -195,6 +211,7 @@ void mem_access() {
 }
 
 void write_back() {
+	wb_temp=mem_wb;
 	if (mem_wb.R_format && write_rd[mem_wb.opcode]) {
 		if (mem_wb.rd==0) {
 			error(WRITE_ZERO);
@@ -202,7 +219,7 @@ void write_back() {
 			reg[mem_wb.rd]=mem_wb.immediate;
 			change.push(mem_wb.rd);
 		}
-	} else if (write_rt[mem_wb.opcode]) {
+	} else if (!mem_wb.R_format && write_rt[mem_wb.opcode]) {
 		if (mem_wb.rt==0) {
 			error(WRITE_ZERO);
 		} else {

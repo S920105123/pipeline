@@ -65,6 +65,7 @@ void output()
 	while (!change.empty()) {
 		int idx=change.front();
 		change.pop();
+		if (idx>=32&&idx!=34) std::cerr<<"GOT "<<idx<<"(pre,reg) = "<<pre_reg[idx]<<' '<<reg[idx]<<std::endl;
 		if (reg[idx]!=pre_reg[idx]) {
 			print_reg(idx,first);
 			pre_reg[idx]=reg[idx];

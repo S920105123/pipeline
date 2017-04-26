@@ -80,6 +80,7 @@ int inst_mult(int rs, int rt, int shamt) {
 	} else {
 		hilo_used=true;
 	}
+	std::cerr<<"rs="<<rs<<" rt="<<rt<<std::endl;
 	res=res*rt;
 	reg[HI]=res>>32;
 	reg[LO]=res&0x00000000FFFFFFFF;
@@ -95,6 +96,7 @@ int inst_multu(int rs, int rt, int shamt) {
 	} else {
 		hilo_used=true;
 	}
+	std::cerr<<"rs="<<rs<<" rt="<<rt<<std::endl;
 	reg[HI]=res>>32;
 	reg[LO]=res&(long long)0x00000000FFFFFFFF;
 	change.push(HI);

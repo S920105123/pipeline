@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 
-enum { WRITE_ZERO, NUM_OVF, OVERWRITE_HILO, MEM_ADDR_OVF, DATA_MISALIGNED };
+enum { WRITE_ZERO, MEM_ADDR_OVF, DATA_MISALIGNED, OVERWRITE_HILO, NUM_OVF };
 //extern std::ofstream ferr;
 extern FILE *ferr;
 extern std::string err_str[5];

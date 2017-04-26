@@ -1,6 +1,7 @@
 #include <fstream>
 #include <cstdio>
 #include <string>
+#include <cstring>
 
 extern int cycle;
 static char err_buf[256];
@@ -8,10 +9,10 @@ static bool error_collector[5];
 FILE *ferr;
 std::string err_str[5] = {
 	"Write $0 Error\n",
-	"Number Overflow\n",
-	"Overwrite HI-LO registers\n",
 	"Address Overflow\n",
-	"Misalignment Error\n"
+	"Misalignment Error\n",
+	"Overwrite HI-LO registers\n",
+	"Number Overflow\n"
 };
 
 void error(int type)
@@ -24,7 +25,7 @@ void output_error()
 	int len=0;
 	for (int i=0;i<sizeof(error_collector);i++) {
 		if (error_collector[i]) {
-			len+=sprintf(err_buf+len,"In cycle %d: %s", cycle, err_str[type].c_str());
+			len+=sprintf(err_buf+len,"In cycle %d: %s", cycle, err_str[i].c_str());
 			error_collector[i]=false;
 		}
 	}
