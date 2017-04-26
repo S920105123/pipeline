@@ -11,10 +11,6 @@ extern bool stop_simulate;
 extern int btol(int target);
 extern short h_btol(short target);
 
-/* Registers */
-std::queue<int> change;
-int reg[35], HI=32, LO=33, &PC=reg[34], &sp=reg[29];
-int pre_reg[35], &pre_PC=pre_reg[34], &pre_sp=pre_reg[29];
 bool hilo_used=false;
 
 /* Function pointers */

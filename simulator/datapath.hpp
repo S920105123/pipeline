@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <queue>
 #include "loader.hpp"
 
 struct State {
@@ -16,7 +17,13 @@ struct State {
 	State(Instruction &in);
 };
 
+const int NONE=35;
+
+/* Registers */
+extern int reg[36], HI, LO, &PC, &sp;
+extern int pre_reg[36], &pre_PC, &pre_sp;
 extern State if_id, id_ex, ex_mem, mem_wb;
+extern std::queue<int> change;
 
 void inst_fetch();
 void inst_decode();

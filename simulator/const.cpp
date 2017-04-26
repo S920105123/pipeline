@@ -1,7 +1,9 @@
 #include <string>
+#include <cstring> 
 #include "const.hpp"
 
 bool legal[64], legal_r[64];
+bool write_rd[64], write_rt[64], read_rs_r[64], read_rs[64], read_rt[64];
 std::string inst_str_r[64], inst_str[64], str_nop;
 
 void init_str_const()
@@ -101,4 +103,15 @@ void init_const()
     legal[J]=true;
     legal[JAL]=true;
     legal[HALT]=true;
+    
+    memset(write_rd,true,sizeof(write_rd));
+    memset(write_rt,true,sizeof(write_rt));
+    memset(read_rt,true,sizeof(read_rt));
+    memset(read_rs,true,sizeof(read_rs));
+    memset(read_rs_r,true,sizeof(read_rs_r));
+    write_rd[JR]=write_rd[MULT]=write_rd[MULTU]=false;
+    write_rt[J]=write_rt[JAL]=write_rt[SW]=write_rt[SH]=write_rt[SB]=write_rt[BEQ]=write_rt[BNE]=write_rt[BGTZ]=false;
+    read_rt[JR]=read_rt[MFHI]=read_rt[MFLO]=false;
+    read_rs_r[SLL]=read_rs_r[SRL]=read_rs_r[SRA]=read_rs_r[MFHI]=read_rs_r[MFLO]=false;
+    read_rs[BEQ]=read_rs[BNE]=read_rs[BGTZ]=read_rs[LUI]=read_rs[J]=read_rs[JAL]=false;
 }

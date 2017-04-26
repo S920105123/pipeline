@@ -44,7 +44,7 @@ inline void print_pipeline()
 {
 	/* Pipeline stages */
 	int len=0;
-	len+=sprintf(buf,"IF: 0x%08x\n",inst[PC>>2].origin);
+	len+=sprintf(buf,"IF: 0x%08X\n",inst[PC>>2].origin);
 	len+=sprintf(buf+len,"ID: %s\n",get_str(if_id).c_str());
 	len+=sprintf(buf+len,"EX: %s\n",get_str(id_ex).c_str());
 	len+=sprintf(buf+len,"DM: %s\n",get_str(ex_mem).c_str());
