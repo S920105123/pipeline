@@ -1,3 +1,3 @@
 cat ../golden/error_dump.rpt
-echo --------------------------
+echo UP golden--------------------------DOWN mine
 cat ../simulator/error_dump.rpt

@@ -10,7 +10,8 @@ cd ../golden
 cd ../simulator
 ./pipeline
 cd ../testcase
-
-echo -------------diff-------------
-diff -c ../golden/snapshot.rpt ../simulator/snapshot.rpt
-diff -c ../golden/error_dump.rpt ../simulator/error_dump.rpt
+echo UP is golden, DOWN is mine.
+echo ----------snapshot-----------
+diff ../golden/snapshot.rpt ../simulator/snapshot.rpt
+echo ------------error------------
+diff ../golden/error_dump.rpt ../simulator/error_dump.rpt

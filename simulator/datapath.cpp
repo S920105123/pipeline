@@ -78,8 +78,10 @@ void print_stage()
 }
 
 void inst_fetch() {
-	if_id=State(inst[PC>>2]);	
-	PC=PC+4;
+	if (!ex_stall) {
+		if_id=State(inst[PC>>2]);
+		PC=PC+4;
+	}
 }
 
 void inst_decode()

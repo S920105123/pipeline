@@ -15,16 +15,11 @@ int num_inst, num_word, cycle;
 char buf[512];
 bool stop_simulate;
 
-inline void print_reg(int idx, bool &first) {
+inline void print_reg(int idx) {
 	/* Print changed registers into snapshot.rpt. */
 	int len;
 	static std::string reg_str[3]={"$HI","$LO","PC"};
-	if (first) {
-		//fout<<std::dec<<"cycle "<<cycle<<std::endl;
-		len=sprintf(buf,"cycle %d\n",cycle);
-		fwrite(buf,1,len,fout);
-		first=false;
-	}
+
 	if (idx>31) {
 		if (idx>33) {
 			fwrite(reg_str[idx-32].c_str(),1,2,fout);
@@ -65,26 +60,22 @@ inline void print_pipeline()
 void output()
 {
 	/* This function check whether register value is changed and output it if yes. */
-	bool first=true;
+	int len=sprintf(buf,"cycle %d\n",cycle);
+        fwrite(buf,1,len,fout);
 	while (!change.empty()) {
 		int idx=change.front();
 		change.pop();
 		if (reg[idx]!=pre_reg[idx]) {
-			print_reg(idx,first);
+			print_reg(idx);
 			pre_reg[idx]=reg[idx];
 		}
 	}
-	/* Check PC */
-	if (PC!=pre_PC) {
-		print_reg(34,first);
-		pre_PC=PC;
-	}
 	
+	print_reg(34);
+	pre_PC=PC;
 	print_pipeline();
-	if (!first) {
-		buf[0]=buf[1]='\n';
-		fwrite(buf,1,2,fout);
-	}
+	buf[0]=buf[1]='\n';
+	fwrite(buf,1,2,fout);
 }
 
 void simulate()
@@ -104,6 +95,7 @@ void simulate()
 		inst_decode();
 		inst_fetch();
 		detect_hazard();
+		detect_stall();
 		if (!stop_simulate) {
 			output();
 		}
@@ -141,8 +133,10 @@ int main()
 	}
 	#endif
 	
+	int len=sprintf(buf,"cycle %d\n",cycle);
+        fwrite(buf,1,len,fout);
 	for (int i=0;i<35;i++) {
-		print_reg(i,first);
+		print_reg(i);
 	}
 	print_pipeline();
 	buf[0]=buf[1]='\n';

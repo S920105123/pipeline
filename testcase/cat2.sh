@@ -1,3 +1,3 @@
 cat ../golden/snapshot.rpt
-echo --------------------------
+echo UP golden--------------------------DOWN mine
 cat ../simulator/snapshot.rpt

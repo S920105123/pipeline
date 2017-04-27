@@ -1,7 +1,12 @@
 20
-addi 1 0 0x2
-lw 2 0 0x20
+addi 0 1 0x2
+lw 0 2 0x20
 add 1 2 0 0
-addi 1 0 0x2
-lw 2 0 0x20
+addi 0 1 0x2
+lw 0 2 0x20
 add 1 2 3 0
+halt
+halt
+halt
+halt
+halt
