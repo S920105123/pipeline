@@ -22,11 +22,11 @@ int main()
 		cout<<"Eat "<<inst<<endl;
 		if (R_code.find(inst)!=R_code.end()) {
 			cin>>dec>>rs>>rt>>rd>>hex>>imm;
-		cout<<dec<<rs<<" "<<rt<<" "<<rd<<" "<<hex<<imm<<endl;
+			printf("rd=%d rs=%d rt=%d shamt=%X\n",rd,rs,rt,imm);
 			word=(rs<<21)|(rt<<16)|(rd<<11)|(imm<<6)|R_code[inst];
 		} else if (I_code.find(inst)!=I_code.end()) {
 			cin>>dec>>rs>>rt>>hex>>imm;
-			cout<<dec<<rs<<" "<<rt<<" "<<hex<<imm<<endl;
+			printf("rt=%d rs=%d imm=%X\n",rt,rs,imm);
 			word=(I_code[inst]<<26)|(rs<<21)|(rt<<16)|(imm&0xFFFF);
 		} else if (J_code.find(inst)!=J_code.end()) {
 			cin>>hex>>imm;

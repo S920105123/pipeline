@@ -37,7 +37,7 @@ void detect_branch()
 		} else if (fwd_memwb_id_rs) {
 			rs=mem_wb.immediate;
 		} else {
-			rt=reg[if_id.rs];
+			rs=reg[if_id.rs];
 		}
 		if (fwd_exmem_id_rt) {
 			rt=ex_mem.immediate;
@@ -48,16 +48,34 @@ void detect_branch()
 		}
 		//std::cerr<<fwd_exmem_id_rs<<' '<<if_id.rs<<' '<<reg[if_id.rs]<<std::endl;
 		branch = (rs==rt); 
-		target_addr=PC+4+4*if_id.immediate;
+		target_addr=PC+4*if_id.immediate;
 	} else if (if_id.opcode==BNE) {
-		rs = fwd_exmem_id_rs ? mem_wb.immediate : reg[if_id.rs];
-		rt = fwd_exmem_id_rt ? mem_wb.immediate : reg[if_id.rt];
+		if (fwd_exmem_id_rs) {
+			rs=ex_mem.immediate;
+		} else if (fwd_memwb_id_rs) {
+			rs=mem_wb.immediate;
+		} else {
+			rs=reg[if_id.rs];
+		}	
+		if (fwd_exmem_id_rt) {
+                        rt=ex_mem.immediate;
+                } else if (fwd_memwb_id_rt) {
+                        rt=mem_wb.immediate;
+                } else {
+                        rt=reg[if_id.rs];
+                }
 		branch = (rs!=rt); 
-		target_addr=PC+4+4*if_id.immediate;
+		target_addr=PC+4*if_id.immediate;
 	} else if (if_id.opcode==BGTZ) {
-		rs = fwd_exmem_id_rs ? ex_mem.immediate : reg[if_id.rs];
+		if (fwd_exmem_id_rs) {
+                        rs=ex_mem.immediate;
+                } else if (fwd_memwb_id_rs) {
+                        rs=mem_wb.immediate;
+                } else {
+                        rs=reg[if_id.rs];
+                }
 		branch = (rs>0);
-		target_addr=PC+4+4*if_id.immediate;
+		target_addr=PC+4*if_id.immediate;
 	} else if (if_id.opcode==J || if_id.opcode==JAL) {
 		branch=true;
 		target_addr=4*if_id.immediate; // Bad implementation, but in this project PC<1024.

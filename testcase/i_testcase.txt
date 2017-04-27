@@ -1,13 +1,7 @@
 20
-addi 0 1 0x20
-lw 0 2 0x20
-beq 2 1 0x2
-halt
-halt
-halt
-halt
-halt
-halt
+addi 1 1 0x1
+addi 0 2 0x2
+bne 1 2 -0x3
 halt
 halt
 halt

@@ -85,11 +85,11 @@ void inst_fetch() {
 	if (ex_stall || id_stall) {
 		return;
 	}
-	if_id=State(inst[PC>>2]);
-	/* Calculate PC */
 	if (branch) {
 		PC=target_addr;
+		if_id=State();
 	} else {
+		if_id=State(inst[PC>>2]);
 		PC=PC+4;
 	}
 }
@@ -120,7 +120,6 @@ void execution() {
 	}
 	
 	ex_mem=id_ex;
-	
 	if (ex_mem.R_format && R_func[ex_mem.opcode]!=NULL) {
 		ex_mem.immediate=R_func[ex_mem.opcode](alu_rs, alu_rt, ex_mem.immediate);
 	} else if (func[ex_mem.opcode]!=NULL) {
