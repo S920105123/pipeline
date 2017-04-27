@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include "hazard.hpp"
 #include "datapath.hpp"
 #include "const.hpp"
@@ -20,12 +21,14 @@ void detect_branch()
 	int rs, rt;
 	if (if_id.R_format) {
 		if (if_id.opcode==JR) {
+			printf("PC=%x %d\n",PC,mem_wb.immediate);
 			branch=true;
 			if (fwd_exmem_id_rs) {
 				target_addr=ex_mem.immediate;
 			} else if (fwd_memwb_id_rs) {
 				target_addr=mem_wb.immediate;
 			} else {
+				printf("PC=%d jr jump reg %d",PC,if_id.rs);
 				target_addr=reg[if_id.rs];
 			}
 		}
@@ -44,7 +47,7 @@ void detect_branch()
 		} else if (fwd_memwb_id_rt) {
 			rt=mem_wb.immediate;
 		} else {
-			rt=reg[if_id.rs];
+			rt=reg[if_id.rt];
 		}
 		//std::cerr<<fwd_exmem_id_rs<<' '<<if_id.rs<<' '<<reg[if_id.rs]<<std::endl;
 		branch = (rs==rt); 
@@ -76,10 +79,13 @@ void detect_branch()
                 }
 		branch = (rs>0);
 		target_addr=PC+4*if_id.immediate;
-	} else if (if_id.opcode==J || if_id.opcode==JAL) {
+	} else if (if_id.opcode==J) {
 		branch=true;
-		target_addr=4*if_id.immediate; // Bad implementation, but in this project PC<1024.
-	}
+		target_addr=4*if_id.immediate; // Bad implementation, but in this project PC<1024
+	} else if (if_id.opcode==JAL) {
+    branch=true;
+		target_addr=4*if_id.rd; // Bad implementation, but in this project PC<1024
+  }
 }
 
 void detect_id_stall() 

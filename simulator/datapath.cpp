@@ -46,7 +46,8 @@ State::State(Instruction &in) {
 	immediate=in.immediate;
 	if (!R_format && opcode==JAL) {
 		rt=31;
-		rd=PC+4; // Use rd to store PC for saving memory.
+    rd=immediate; // Use rd to store target addr for saving memory.
+    immediate=PC+4;
 	}
 }
 
@@ -242,11 +243,7 @@ void write_back() {
                 error(WRITE_ZERO);
             }
 		} else {
-			if (mem_wb.opcode==JAL) {
-				reg[mem_wb.rt]=mem_wb.rd; // Use rd to store PC for saving memory.
-			} else {
-				reg[mem_wb.rt]=mem_wb.immediate;
-			}
+      reg[mem_wb.rt]=mem_wb.immediate;
 			change.push(mem_wb.rt);
 		}
 	}
