@@ -62,7 +62,7 @@ void detect_branch()
                 } else if (fwd_memwb_id_rt) {
                         rt=mem_wb.immediate;
                 } else {
-                        rt=reg[if_id.rs];
+                        rt=reg[if_id.rt];
                 }
 		branch = (rs!=rt); 
 		target_addr=PC+4*if_id.immediate;
