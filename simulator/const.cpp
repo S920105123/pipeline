@@ -2,7 +2,7 @@
 #include <cstring> 
 #include "const.hpp"
 
-bool legal[64], legal_r[64];
+bool legal[64], legal_r[64], is_load[64];
 bool write_rd[64], write_rt[64], read_rs_r[64], read_rs[64], read_rt[64], read_rt_r[64];
 std::string inst_str_r[64], inst_str[64], str_nop;
 
@@ -147,4 +147,11 @@ void init_const()
 	read_rs_r[SRA]=false;
 	read_rs_r[MFHI]=false;
 	read_rs_r[MFLO]=false;
+	
+	memset(is_load,false,sizeof(is_load));
+	is_load[LW]=true;
+	is_load[LH]=true;
+	is_load[LHU]=true;
+	is_load[LB]=true;
+	is_load[LBU]=true;
 }

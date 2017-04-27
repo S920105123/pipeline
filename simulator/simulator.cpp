@@ -45,8 +45,12 @@ inline void print_pipeline()
 {
 	/* Pipeline stages */
 	int len=0;
-	len+=sprintf(buf,"IF: 0x%08X\n",inst[PC>>2].origin);
-	len+=sprintf(buf+len,"ID: %s\n",get_str(if_id).c_str());
+	len+=sprintf(buf,"IF: 0x%08X",inst[PC>>2].origin);
+	if (ex_stall) len+=sprintf(buf+len," to_be_stalled");
+	buf[len++]='\n';
+	len+=sprintf(buf+len,"ID: %s",get_str(if_id).c_str());
+	if (ex_stall) len+=sprintf(buf+len," to_be_stalled");
+	buf[len++]='\n';
 	len+=sprintf(buf+len,"EX: %s",get_str(id_ex).c_str());
 	if (fwd_exmem_ex_rs) len+=sprintf(buf+len," fwd_EX-DM_rs_$%d",id_ex.rs);
 	if (fwd_memwb_ex_rs) len+=sprintf(buf+len," fwd_DM-WB_rs_$%d",id_ex.rs);
@@ -65,7 +69,6 @@ void output()
 	while (!change.empty()) {
 		int idx=change.front();
 		change.pop();
-		if (idx>=32&&idx!=34) std::cerr<<"GOT "<<idx<<"(pre,reg) = "<<pre_reg[idx]<<' '<<reg[idx]<<std::endl;
 		if (reg[idx]!=pre_reg[idx]) {
 			print_reg(idx,first);
 			pre_reg[idx]=reg[idx];

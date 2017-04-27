@@ -12,7 +12,6 @@ int reg[36], HI=32, LO=33, &PC=reg[34], &sp=reg[29];
 int pre_reg[36], &pre_PC=pre_reg[34], &pre_sp=pre_reg[29];
 State if_id, id_ex, ex_mem, mem_wb, wb_temp;
 std::queue<int> change;
-bool stall;
 extern bool stop_simulate,fwd_exmem_ex_rs, fwd_exmem_ex_rt, fwd_memwb_ex_rs, fwd_memwb_ex_rt;
 
 State::State() {
@@ -85,7 +84,11 @@ void inst_fetch() {
 
 void inst_decode()
 {
-	id_ex=if_id;
+	if (ex_stall) {
+		id_ex=State();
+	} else {
+		id_ex=if_id;
+	}
 }
 
 void execution() {
