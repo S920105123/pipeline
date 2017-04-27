@@ -47,7 +47,7 @@ inline void print_pipeline()
 	len+=sprintf(buf+len,"ID: %s",get_str(if_id).c_str());
 	if (ex_stall || id_stall) len+=sprintf(buf+len," to_be_stalled");
 	if (fwd_exmem_id_rs) len+=sprintf(buf+len," fwd_EX-DM_rs_$%d",if_id.rs);
-	if (fwd_exmem_id_rt) len+=sprintf(buf+len," fwd_EX-DM_rt_$%d",if_id.rs);
+	if (fwd_exmem_id_rt) len+=sprintf(buf+len," fwd_EX-DM_rt_$%d",if_id.rt);
 	buf[len++]='\n';
 	len+=sprintf(buf+len,"EX: %s",get_str(id_ex).c_str());
 	if (fwd_exmem_ex_rs) len+=sprintf(buf+len," fwd_EX-DM_rs_$%d",id_ex.rs);
@@ -76,6 +76,7 @@ void output()
 	
 	print_reg(34);
 	pre_PC=PC;
+	//print_stage();
 	print_pipeline();
 	buf[0]=buf[1]='\n';
 	fwrite(buf,1,2,fout);

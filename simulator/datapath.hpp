@@ -30,6 +30,7 @@ void inst_decode();
 void execution();
 void mem_access();
 void write_back();
+void print_stage();
 std::string& get_str(State &who);
 void init_pipeline();
 

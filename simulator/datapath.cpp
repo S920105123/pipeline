@@ -85,6 +85,12 @@ void inst_fetch() {
 	if (!ex_stall && !id_stall) {
 		if_id=State(inst[PC>>2]);
 	}
+	/* Calculate PC */
+	if (branch) {
+		PC=target_addr;
+	} else {
+		PC=PC+4;
+	}
 }
 
 void inst_decode()
@@ -95,9 +101,6 @@ void inst_decode()
 	} else {
 		id_ex=if_id;
 	}
-	
-	/* Calculate PC */
-	PC = branch ? target_addr : PC+4;
 }
 
 void execution() {
