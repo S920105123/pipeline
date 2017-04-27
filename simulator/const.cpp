@@ -117,7 +117,6 @@ void init_const()
 	write_rd[MULTU]=false;
 	
     write_rt[J]=false;
-	write_rt[JAL]=false;
 	write_rt[SW]=false;
 	write_rt[SH]=false;
 	write_rt[SB]=false;

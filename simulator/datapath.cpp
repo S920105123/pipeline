@@ -44,6 +44,10 @@ State::State(Instruction &in) {
 	}
 	rs=in.rs; rt=in.rt; rd=in.rd;
 	immediate=in.immediate;
+	if (!R_format && opcode==JAL) {
+		rt=31;
+		rd=PC+4; // Use rd to store PC for saving memory.
+	}
 }
 
 std::string& get_str(State &who) {
@@ -78,19 +82,22 @@ void print_stage()
 }
 
 void inst_fetch() {
-	if (!ex_stall) {
+	if (!ex_stall && !id_stall) {
 		if_id=State(inst[PC>>2]);
-		PC=PC+4;
 	}
 }
 
 void inst_decode()
 {
-	if (ex_stall) {
+	if (ex_stall || id_stall) {
 		id_ex=State();
+		return;
 	} else {
 		id_ex=if_id;
 	}
+	
+	/* Calculate PC */
+	PC = branch ? target_addr : PC+4;
 }
 
 void execution() {
@@ -229,10 +236,14 @@ void write_back() {
 	} else if (!mem_wb.R_format && write_rt[mem_wb.opcode]) {
 		if (mem_wb.rt==0) {
 			if (!mem_wb.NOP) {
-                                error(WRITE_ZERO);
-                        }
+                error(WRITE_ZERO);
+            }
 		} else {
-			reg[mem_wb.rt]=mem_wb.immediate;
+			if (mem_wb.opcode==JAL) {
+				reg[mem_wb.rt]=mem_wb.rd; // Use rd to store PC for saving memory.
+			} else {
+				reg[mem_wb.rt]=mem_wb.immediate;
+			}
 			change.push(mem_wb.rt);
 		}
 	}

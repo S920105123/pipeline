@@ -41,10 +41,13 @@ inline void print_pipeline()
 	/* Pipeline stages */
 	int len=0;
 	len+=sprintf(buf,"IF: 0x%08X",inst[PC>>2].origin);
-	if (ex_stall) len+=sprintf(buf+len," to_be_stalled");
+	if (ex_stall || id_stall) len+=sprintf(buf+len," to_be_stalled");
+	if (branch) len+=sprintf(buf+len," to_be_flushed");
 	buf[len++]='\n';
 	len+=sprintf(buf+len,"ID: %s",get_str(if_id).c_str());
-	if (ex_stall) len+=sprintf(buf+len," to_be_stalled");
+	if (ex_stall || id_stall) len+=sprintf(buf+len," to_be_stalled");
+	if (fwd_exmem_id_rs) len+=sprintf(buf+len," fwd_EX-DM_rs_$%d",if_id.rs);
+	if (fwd_exmem_id_rt) len+=sprintf(buf+len," fwd_EX-DM_rt_$%d",if_id.rs);
 	buf[len++]='\n';
 	len+=sprintf(buf+len,"EX: %s",get_str(id_ex).c_str());
 	if (fwd_exmem_ex_rs) len+=sprintf(buf+len," fwd_EX-DM_rs_$%d",id_ex.rs);
@@ -96,6 +99,9 @@ void simulate()
 		inst_fetch();
 		detect_hazard();
 		detect_stall();
+		detect_id_hazard();
+		detect_id_stall();
+		detect_branch();
 		if (!stop_simulate) {
 			output();
 		}
