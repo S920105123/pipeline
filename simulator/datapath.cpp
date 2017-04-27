@@ -82,9 +82,10 @@ void print_stage()
 }
 
 void inst_fetch() {
-	if (!ex_stall && !id_stall) {
-		if_id=State(inst[PC>>2]);
+	if (ex_stall || id_stall) {
+		return;
 	}
+	if_id=State(inst[PC>>2]);
 	/* Calculate PC */
 	if (branch) {
 		PC=target_addr;
