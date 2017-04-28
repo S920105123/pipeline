@@ -8,7 +8,7 @@
 #include "ALU.hpp"
 #include "error.hpp"
 #include "hazard.hpp"
-#define DEBUG
+//#define DEBUG
 
 FILE *fout;
 int num_inst, num_word, cycle;

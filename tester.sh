@@ -8,9 +8,14 @@ do
 	cp ./open/${dir}/iimage.bin ./simulator/iimage.bin
 	cp ./open/${dir}/dimage.bin ./golden/dimage.bin
         cp ./open/${dir}/iimage.bin ./golden/iimage.bin
-	cd ./simulator
-	./pipeline
-	cd ../golden
+	cd ./golden
+	./pipeline > tmp
+	if [ "$(cat tmp)" != "" ]; then
+		cd ..;	
+		echo -e "   Testcase: ${dir}\t- [Illegal]..."
+		continue;
+	fi
+	cd ../simulator
 	./pipeline
 	cd ..
 	diff ./golden/snapshot.rpt ./simulator/snapshot.rpt > diff_snapshot.tmp

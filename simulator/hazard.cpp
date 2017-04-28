@@ -21,14 +21,14 @@ void detect_branch()
 	int rs, rt;
 	if (if_id.R_format) {
 		if (if_id.opcode==JR) {
-			printf("PC=%x %d\n",PC,mem_wb.immediate);
+			//printf("PC=%x %d\n",PC,mem_wb.immediate);
 			branch=true;
 			if (fwd_exmem_id_rs) {
 				target_addr=ex_mem.immediate;
 			} else if (fwd_memwb_id_rs) {
 				target_addr=mem_wb.immediate;
 			} else {
-				printf("PC=%d jr jump reg %d",PC,if_id.rs);
+				//printf("PC=%d jr jump reg %d",PC,if_id.rs);
 				target_addr=reg[if_id.rs];
 			}
 		}

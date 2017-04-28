@@ -104,19 +104,14 @@ void init_const()
     legal[JAL]=true;
     legal[HALT]=true;
     
-    /* Registers read/write. */
-    memset(write_rd,true,sizeof(write_rd));
-    memset(write_rt,true,sizeof(write_rt));
-    memset(read_rt,false,sizeof(read_rt));
-    memset(read_rt_r,true,sizeof(read_rt_r));
-    memset(read_rs,true,sizeof(read_rs));
-    memset(read_rs_r,true,sizeof(read_rs_r));
-    
-    write_rd[JR]=false;
+  /* Registers read/write. */
+  memset(write_rd,true,sizeof(write_rd));
+	write_rd[JR]=false;
 	write_rd[MULT]=false;
 	write_rd[MULTU]=false;
 	
-    write_rt[J]=false;
+  memset(write_rt,true,sizeof(write_rt));
+	write_rt[J]=false;
 	write_rt[SW]=false;
 	write_rt[SH]=false;
 	write_rt[SB]=false;
@@ -124,16 +119,19 @@ void init_const()
 	write_rt[BNE]=false;
 	write_rt[BGTZ]=false;
 	write_rt[HALT]=false;
-	
+
+  memset(read_rt,false,sizeof(read_rt));
 	read_rt[SW]=true;
 	read_rt[SH]=true;
 	read_rt[SB]=true;
 	
-    read_rt_r[JR]=false;
+  memset(read_rt_r,true,sizeof(read_rt_r));
+	read_rt_r[JR]=false;
 	read_rt_r[MFHI]=false;
 	read_rt_r[MFLO]=false;
-	
-    read_rs[BEQ]=false;
+ 
+  memset(read_rs,true,sizeof(read_rs));
+	read_rs[BEQ]=false;
 	read_rs[BNE]=false;
 	read_rs[BGTZ]=false;
 	read_rs[LUI]=false;
@@ -141,9 +139,11 @@ void init_const()
 	read_rs[JAL]=false;
 	read_rs[HALT]=false;
 	
+  memset(read_rs_r,true,sizeof(read_rs_r));
 	read_rs_r[SLL]=false;
 	read_rs_r[SRL]=false;
 	read_rs_r[SRA]=false;
+  read_rs_r[JR]=false;
 	read_rs_r[MFHI]=false;
 	read_rs_r[MFLO]=false;
 	
