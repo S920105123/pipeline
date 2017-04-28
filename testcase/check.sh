@@ -1,5 +1,5 @@
 ./i_generator
-./d_generator
+#./d_generator
 cp dimage.bin ../golden/dimage.bin
 cp iimage.bin ../golden/iimage.bin
 cp dimage.bin ../simulator/dimage.bin
