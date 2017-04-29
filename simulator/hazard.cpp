@@ -240,12 +240,12 @@ void detect_stall()
 	ex_stall = ex_stall || (write_reg==read_reg && read_reg!=0 && read_reg!=-1);
 	
 	/* If stalled, no EX-fwd there. */
-	if (ex_stall) {
-		fwd_exmem_ex_rs=false;
-		fwd_exmem_ex_rt=false;
-		fwd_memwb_ex_rs=false;
-		fwd_memwb_ex_rt=false;
-	}
+//	if (ex_stall) {
+//		fwd_exmem_ex_rs=false;
+//		fwd_exmem_ex_rt=false;
+//		fwd_memwb_ex_rs=false;
+//		fwd_memwb_ex_rt=false;
+//	}
 }
 
 void detect_hazard()
